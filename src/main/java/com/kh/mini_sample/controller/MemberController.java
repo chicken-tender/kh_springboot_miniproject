@@ -1,11 +1,10 @@
 package com.kh.mini_sample.controller;
 import com.kh.mini_sample.dao.MemberDAO;
+import com.kh.mini_sample.vo.MemberVO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 import java.util.Map;
 
 /* CrossOrigin :
@@ -24,5 +23,12 @@ public class MemberController {
         MemberDAO dao = new MemberDAO();
         boolean result = dao.loginCheck(id, pwd);
         return new ResponseEntity<>(result, HttpStatus.OK); // DB 다녀오기 전에 잘 넘어오는지 확인해보는 디버깅 코드
+    }
+    // GET : 회원 조회
+    @GetMapping("/member/{name}")
+    public ResponseEntity<List<MemberVO>> memberList(@PathVariable("name") String name) {
+        MemberDAO mdao = new MemberDAO();
+        List<MemberVO> list = mdao.memberSelect();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
