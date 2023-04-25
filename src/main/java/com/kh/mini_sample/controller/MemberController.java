@@ -22,7 +22,7 @@ public class MemberController {
         String pwd = loginData.get("pwd");
         MemberDAO dao = new MemberDAO();
         boolean result = dao.loginCheck(id, pwd);
-        return new ResponseEntity<>(result, HttpStatus.OK); // DB 다녀오기 전에 잘 넘어오는지 확인해보는 디버깅 코드
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
     // GET : 회원 조회
     @GetMapping("/member/{name}")
