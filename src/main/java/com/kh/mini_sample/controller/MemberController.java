@@ -25,10 +25,29 @@ public class MemberController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
     // GET : 회원 조회
-    @GetMapping("/member/{name}")
-    public ResponseEntity<List<MemberVO>> memberList(@PathVariable("name") String name) {
+    @GetMapping("/member")
+    public ResponseEntity<List<MemberVO>> memberList(@RequestParam String name) {
         MemberDAO mdao = new MemberDAO();
         List<MemberVO> list = mdao.memberSelect();
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+    // GET : 가입여부 확인
+    @GetMapping("/check")
+    public ResponseEntity<Boolean> memberCheck(@RequestParam String id) {
+        MemberDAO dao = new MemberDAO();
+        boolean isTrue = dao.regMemberCheck(id);
+        return new ResponseEntity<>(isTrue, HttpStatus.OK);
+    }
+
+    // POST : 회원 가입
+    @PostMapping("/new")
+    public ResponseEntity<Boolean> memberRegister(@RequestBody Map<String, String> regData) {
+        String getId = regData.get("id");
+        String getPwd = regData.get("pwd");
+        String getName = regData.get("name");
+        String getMail = regData.get("mail");
+        MemberDAO dao = new MemberDAO();
+        boolean isTrue = dao.memberRegister(getId, getPwd, getName, getMail);
+        return new ResponseEntity<>(isTrue, HttpStatus.OK);
     }
 }

@@ -74,4 +74,47 @@ public class MemberDAO {
         }
         return list;
     }
+
+    // 회원 가입 여부 확인
+    public boolean regMemberCheck(String id) {
+        boolean isNotReg = false;
+        try {
+            conn = Common.getConnection();
+            stmt = conn.createStatement();
+            String sql = "SELECT * FROM T_MEMBER WHERE ID = " + "'" + id +"'";
+            rs = stmt.executeQuery(sql);
+            if(rs.next()) isNotReg = false;
+            else isNotReg = true;
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        Common.close(rs);
+        Common.close(stmt);
+        Common.close(conn);
+        return isNotReg; // 가입 되어 있으면 false, 가입이 안되어 있으면 true
+    }
+
+    // 회원 가입
+    public boolean memberRegister(String id, String pwd, String name, String mail) {
+        int result = 0;
+        String sql = "INSERT INTO T_MEMBER(ID, PWD, NAME, EMAIL, JOIN) VALUES(?, ?, ?, ?, SYSDATE)";
+        try {
+            conn = Common.getConnection();
+            pStmt = conn.prepareStatement(sql);
+            pStmt.setString(1, id);
+            pStmt.setString(2, pwd);
+            pStmt.setString(3, name);
+            pStmt.setString(4, mail);
+            result = pStmt.executeUpdate();
+            System.out.println("회원 가입 DB 결과 확인 : " + result);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Common.close(pStmt);
+        Common.close(conn);
+
+        if(result == 1) return true;
+        else return false;
+    }
 }
